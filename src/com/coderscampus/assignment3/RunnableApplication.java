@@ -1,36 +1,54 @@
 package com.coderscampus.assignment3;
 
-
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-
+import java.util.Scanner;
 
 public class RunnableApplication {
 
 	public static void main(String[] args) throws IOException {
-//		Scanner scanner = new Scanner(System.in);
-//		UserService userService = new UserService();
-		
+		Scanner scanner = new Scanner(System.in);
+		FileService fileService = new FileService();
+		User user = User();
+		fileService.readFile();
 
-		BufferedReader fileReader = new BufferedReader(new FileReader("data.txt"));
-		User[] userData = new User[4];
-		String line;
-		int i = 0;
-		while ((line = fileReader.readLine()) != null) {
-			String[] parts = line.split(",");
-			userData [i++] = new User (parts[0] , parts[1], parts[2]);
-			
-//			System.out.println(line);
+		int attempts = 0;
+		boolean found = false;
+		while (!found) {
+			System.out.println("Enter username: ");
+			String usernameInput = scanner.nextLine().toLowerCase();
+			System.out.println("Enter password: ");
+			String passwordInput = scanner.nextLine();
+
+			if (user.getUsername().equalsIgnoreCase(usernameInput) && (user.getPassword().equals(passwordInput))) {
+
+				System.out.println("Welcome, " + user.getName() + "!");
+				found = true;
+
+			} else if ((user.getUsername() != usernameInput) && (user.getPassword() != passwordInput)) {
+
+				System.out.println("Invalid login, please try again");
+				attempts++;
+
+			}
+
+			{
+
+				if (attempts == 5) {
+					System.out.println("Too many failed login attempts, you are now locked out.");
+
+					break;
+				}
+
+			}
 
 		}
 
-		fileReader.close();
-
-//		String[] input = { "john.doe@mydomain.net", "Hdk398jf!", "John Doe" };
-//		User UserInfo = userService.createUser(input);
-//		System.out.println("Welcome {insert user's name here}");
+		scanner.close();
 
 	}
 
+	private static User User() {
+
+		return new User("username", "password", "name");
+	}
 }
