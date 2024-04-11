@@ -46,7 +46,6 @@ public class RunnableApplication {
 			if (user.getUsername().equalsIgnoreCase(usernameInput) && (user.getPassword().equals(passwordInput))) {
 
 				System.out.println("Welcome, " + user.getName() + "!");
-
 				return true;
 
 			}
