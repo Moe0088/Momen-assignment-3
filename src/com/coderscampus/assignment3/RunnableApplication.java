@@ -12,6 +12,8 @@ public class RunnableApplication {
 		User[] users = fileService.readFile();
 
 		int attempts = 0;
+		boolean isValid = false;
+		
 
 		while (attempts < 5) {
 
@@ -20,10 +22,17 @@ public class RunnableApplication {
 			System.out.println("Enter password: ");
 			String passwordInput = scan.nextLine();
 			attempts++;
-			validateUser(users, usernameInput, passwordInput);
+			isValid = validateUser(users, usernameInput, passwordInput);
+			
+
+			if (isValid) {
+				attempts = 0;
+				break;
+			}
 
 			if (attempts == 5) {
 				System.out.println("Too many failed login attempts, you are now locked out.");
+			
 
 			}
 
@@ -32,18 +41,18 @@ public class RunnableApplication {
 
 	}
 
-	private static void validateUser(User[] users, String usernameInput, String passwordInput) {
+	private static boolean validateUser(User[] users, String usernameInput, String passwordInput) {
 		for (User user : users) {
 			if (user.getUsername().equalsIgnoreCase(usernameInput) && (user.getPassword().equals(passwordInput))) {
 
 				System.out.println("Welcome, " + user.getName() + "!");
-				break;
 
-			} else {
+				return true;
 
-				System.out.println("Invalid login, please try again");
-				break;
 			}
 		}
+		System.out.println("Invalid login, please try again");
+		return false;
+
 	}
 }
